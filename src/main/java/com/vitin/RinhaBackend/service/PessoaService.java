@@ -13,16 +13,8 @@ public class PessoaService {
     private PessoaRepository pessoaRepository;
 
     public Pessoa create(Pessoa p){
-        if(p.getApelido() == null || p.getApelido().length() > 32 ||pessoaRepository.findByApelido(p.getApelido()).isPresent()){
-            throw new InvalidRequestException("Apelido inválido");
-        }
-
-        if(p.getNome() == null || p.getNome().length() > 100){
-            throw new InvalidRequestException("Nome inválido");
-        }
-
-        if(p.getNascimento() == null){
-            throw new InvalidRequestException("Data inválida");
+        if(pessoaRepository.findByApelido(p.getApelido()).isPresent()){
+            throw new InvalidRequestException("Apelido já está em uso");
         }
 
         return pessoaRepository.save(p);
