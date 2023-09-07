@@ -1,13 +1,14 @@
 package com.vitin.RinhaBackend.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -15,17 +16,18 @@ import java.util.UUID;
 public class Pessoa implements Serializable {
 
     @Id
-    @Column
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @Column(nullable = false, length = 32, unique = true)
-    String apelido;
-
+    private String apelido;
     @Column(nullable = false, length = 100)
-    String nome;
+    private String nome;
     @Column(nullable = false)
+    @NotNull
     @DateTimeFormat(pattern="yyyy/MM/dd")
-    Date nascimento;
-    String[] stack;
+    private LocalDate nascimento;
+
+    private List<String> stack;
 
     public UUID getId() {
         return id;
@@ -51,26 +53,26 @@ public class Pessoa implements Serializable {
         this.nome = nome;
     }
 
-    public Date getNascimento() {
+    public LocalDate getNascimento() {
         return nascimento;
     }
 
-    public void setNascimento(Date nascimento) {
+    public void setNascimento(LocalDate nascimento) {
         this.nascimento = nascimento;
     }
 
-    public String[] getStack() {
+    public List<String> getStack() {
         return stack;
     }
 
-    public void setStack(String[] stack) {
+    public void setStack(List<String> stack) {
         this.stack = stack;
     }
 
     public Pessoa() {
     }
 
-    public Pessoa(UUID id, String apelido, String nome, Date nascimento, String[] stack) {
+    public Pessoa(UUID id, String apelido, String nome, LocalDate nascimento, List<String> stack) {
         this.id = id;
         this.apelido = apelido;
         this.nome = nome;
