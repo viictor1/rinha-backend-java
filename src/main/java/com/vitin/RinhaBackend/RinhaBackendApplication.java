@@ -8,6 +8,7 @@ public class RinhaBackendApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(RinhaBackendApplication.class, args);
+		System.out.println("oiii");
 	}
 
 }
