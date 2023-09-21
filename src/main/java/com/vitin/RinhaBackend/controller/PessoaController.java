@@ -1,4 +1,4 @@
-package com.vitin.RinhaBackend;
+package com.vitin.RinhaBackend.controller;
 
 import com.vitin.RinhaBackend.entity.Pessoa;
 import com.vitin.RinhaBackend.service.PessoaService;
@@ -23,7 +23,6 @@ public class PessoaController {
         p = pessoaService.create(p);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(p.getId()).toUri();
-
         return ResponseEntity.created(uri).body(p);
     }
 
