@@ -1,25 +1,69 @@
 version: '3.9'
 
+
 services:
-  app:
-    image: 'docker-spring-boot-postgres:latest'
+  app1:
+    hostname: 'app1'
     build:
       context: .
-    container_name: app
+    container_name: app1
     depends_on:
       - db
     environment:
+      - SERVER_PORT=8080
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/rinhadb
       - SPRING_DATASOURCE_USERNAME=rinha
       - SPRING_DATASOURCE_PASSWORD=rinha123
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    deploy: 
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '0.5GB'
+
+  app2:
+    hostname: 'app2'
+    build:
+      context: .
+    container_name: app2
+    depends_on:
+      - db
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/rinhadb
+      - SPRING_DATASOURCE_USERNAME=rinha
+      - SPRING_DATASOURCE_PASSWORD=rinha123
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    deploy: 
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '0.5GB'
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app1
+      - app2
     ports:
-      - "8080:8080"
+      - "9999:9999"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '0.5GB'
 
   db:
-    image: 'postgres:13.1-alpine'
+    image: postgres:13.1-alpine
     container_name: db
     environment:
       - POSTGRES_USER=rinha
       - POSTGRES_PASSWORD=rinha123
       - POSTGRES_DB=rinhadb
+    deploy:
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: '1.5GB'
